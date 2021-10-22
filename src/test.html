@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./style.css">
+    <title>Glitter</title>
+</head>
+
+<body onresize="resizeCanvas(event)">
+    <p id="gyroX"></p>
+    <p id="gyroy"></p>
+</body>
+<script>
+    function init(gyro) {
+        if (gyro) {
+            if (gyroAllowed) {
+                const x = document.getElementById("gyroX");
+                const y = document.getElementById("gyroY");
+                let gyroscope = new Gyroscope({ frequency: 60 });
+                gyroscope.addEventListener('reading', e => {
+                    x.innerText = gyroscope.x;
+                    y.innerText = gyroscope.y;
+                });
+                gyroscope.start();
+            }
+        }
+    }
+
+    function requestGyro() {
+        navigator.permissions.query({ name: 'gyroscope' }).then(function (result) {
+            handleRequestUpdate(result);
+            result.onchange = function () {
+                handleRequestUpdate(result);
+            }
+        }).catch(() => init(false));
+    }
+
+    function handleRequestUpdate(result) {
+        if (result.state == 'granted') {
+            init(true);
+        } else if (result.state == 'prompt') {
+            init(true);
+        } else if (result.state == 'denied') {
+            init(false);
+        }
+    }
+
+    requestGyro();
+</script>
+
+</html>
