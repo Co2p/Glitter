@@ -39,7 +39,7 @@ class Particle {
     }
 
     colorRandom(bias = 1) {
-        return Math.min(Math.floor(Math.random() * 255 * bias), 255);
+        return Math.max(Math.min(Math.floor(Math.random() * 255 * bias), 255), 1);
     }
 
     isOutsideCanvas(margin) {
