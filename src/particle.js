@@ -3,7 +3,7 @@ class Particle {
     constructor(width, height, r, g, b) {
         this.width = width;
         this.height = height;
-        this.color = `rgb(${r}, ${g}, ${b})`;
+        this.setColor(r, g, b);
         this.resetPositionAndVelocity()
         this.size = Math.random() * 3;
         this.setMaxVelocity(1);
@@ -33,6 +33,9 @@ class Particle {
 
     setMaxVelocity(velocity) {
         this.maxVelocity = velocity;
+    }
+    setColor(r, g, b) {
+        this.color = `rgb(${r}, ${g}, ${b})`;
     }
 
     isOutsideCanvas(margin) {

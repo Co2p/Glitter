@@ -1,5 +1,11 @@
 let particlesArray = [];
 const canvas = document.getElementById("canvas");
+const sliderDiv = document.getElementById("sliders");
+const velocitySlider = document.getElementById("velocity");
+const colorRedSlider = document.getElementById("colorRed");
+const colorGreenSlider = document.getElementById("colorGreen");
+const colorBlueSlider = document.getElementById("colorBlue");
+
 canvas.height = window.innerHeight;
 canvas.width = window.innerWidth;
 
@@ -11,15 +17,12 @@ function maxParticles() {
     return max;
 }
 
-
-
-
 function init() {
     const max = maxParticles();
     const current = particlesArray.length;
     if (max > current) {
         for (let i = 0; i < max - current; i++)
-            particlesArray.push(new Particle(canvas.width, canvas.height, colorComponent(1.1), colorComponent(1), colorComponent(0.4)));
+            particlesArray.push(new Particle(canvas.width, canvas.height, colorRedSlider.valueAsNumber, colorGreenSlider.valueAsNumber, colorBlueSlider.valueAsNumber));
     }
     if (max < current) {
         for (let i = 0; i < current - max; i++)
@@ -27,6 +30,7 @@ function init() {
     }
     animate();
 }
+
 
 function colorComponent(bias = 1) {
     return Math.min(Math.floor(Math.random() * 255 * bias), 255);
@@ -49,9 +53,22 @@ function resizeCanvas() {
     particlesArray.forEach(particle => particle.resizeCanvas(canvas.width, canvas.height));
 }
 
-const velocitySlider = document.getElementById("velocity");
 velocitySlider.addEventListener("change", (event) => {
     particlesArray.forEach((particle) => particle.setMaxVelocity(event.target.value))
+});
+
+colorRedSlider.addEventListener("change", (event) => {
+    particlesArray.forEach((particle) => particle.setColor(event.target.valueAsNumber, colorGreenSlider.valueAsNumber, colorBlueSlider.valueAsNumber))
+});
+colorGreenSlider.addEventListener("change", (event) => {
+    particlesArray.forEach((particle) => particle.setColor(colorRedSlider.valueAsNumber, event.target.valueAsNumber, colorBlueSlider.valueAsNumber))
+});
+colorBlueSlider.addEventListener("change", (event) => {
+    particlesArray.forEach((particle) => particle.setColor(colorRedSlider.valueAsNumber, colorGreenSlider.valueAsNumber, event.target.valueAsNumber))
+});
+
+canvas.addEventListener("click", (event) => {
+    sliderDiv.style.display = sliderDiv.style.display === "grid" ? "none" : "grid";
 });
 
 init();
