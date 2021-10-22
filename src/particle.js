@@ -1,11 +1,12 @@
 class Particle {
 
-    constructor(width, height) {
+    constructor(width, height, r, g, b) {
         this.width = width;
         this.height = height;
+        this.color = `rgb(${r}, ${g}, ${b})`;
         this.resetPositionAndVelocity()
-        this.size = Math.random() * 2;
-        this.maxVelocity = 1;
+        this.size = Math.random() * 3;
+        this.setMaxVelocity(1);
     }
 
     resetPositionAndVelocity() {
@@ -15,19 +16,23 @@ class Particle {
         this.velocityY = Math.random();
     }
 
-    update(preferenceX, preferenceY) {
-        if(this.isOutsideCanvas(5)) {
+    update() {
+        if (this.isOutsideCanvas(5)) {
             this.resetPositionAndVelocity();
         }
-        this.velocityX = this.gradualVelocityChange(this.velocityX+ preferenceX);
+        this.velocityX = this.gradualVelocityChange(this.velocityX);
         this.x += this.velocityX;
-        this.velocityY = this.gradualVelocityChange(this.velocityY + preferenceY);
+        this.velocityY = this.gradualVelocityChange(this.velocityY);
         this.y += this.velocityY;
     }
 
     resizeCanvas(width, height) {
         this.width = width;
         this.height = height;
+    }
+
+    setMaxVelocity(velocity) {
+        this.maxVelocity = velocity;
     }
 
     isOutsideCanvas(margin) {
@@ -47,7 +52,7 @@ class Particle {
 
     draw() {
         context.beginPath();
-        context.fillStyle = "gold";
+        context.fillStyle = this.color;
         context.arc(this.x, this.y, this.size, 0, Math.PI * 2);
         context.fill();
     }

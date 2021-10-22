@@ -3,3 +3,8 @@ body {
     margin: 0;
     overflow: hidden;
 }
+
+#velocity {
+    position: fixed;
+    top: 0;
+}

@@ -2,7 +2,6 @@ let particlesArray = [];
 const canvas = document.getElementById("canvas");
 canvas.height = window.innerHeight;
 canvas.width = window.innerWidth;
-let gyroscope = {x: 0, y: 0};
 
 const context = canvas.getContext("2d");
 
@@ -15,31 +14,29 @@ function maxParticles() {
 
 
 
-function init(gyroAllowed) {
-    if (gyroAllowed) {
-        let gyroscope = new Gyroscope({ frequency: 60 });
-        gyroscope.start();
-    }
+function init() {
     const max = maxParticles();
     const current = particlesArray.length;
     if (max > current) {
         for (let i = 0; i < max - current; i++)
-            particlesArray.push(new Particle(canvas.width, canvas.height));
+            particlesArray.push(new Particle(canvas.width, canvas.height, colorComponent(1.1), colorComponent(1), colorComponent(0.4)));
     }
     if (max < current) {
         for (let i = 0; i < current - max; i++)
             particlesArray.pop();
     }
-    animate(gyroAllowed);
+    animate();
 }
 
+function colorComponent(bias = 1) {
+    return Math.min(Math.floor(Math.random() * 255 * bias), 255);
+}
 
 function animate() {
     context.fillStyle = "rgb(0,0,0)";
     context.fillRect(0, 0, canvas.width, canvas.height); // clear canvas
     particlesArray.forEach(particle => {
-        
-        particle.update(gyroscope.x, gyroscope.y);
+        particle.update();
         particle.draw();
     });
     requestAnimationFrame(animate);
@@ -54,26 +51,7 @@ function resizeCanvas() {
 
 const velocitySlider = document.getElementById("velocity");
 velocitySlider.addEventListener("change", (event) => {
-    particlesArray.forEach((particle) => particle)
+    particlesArray.forEach((particle) => particle.setMaxVelocity(event.target.value))
 });
 
-function requestGyro() {
-    navigator.permissions.query({ name: 'gyroscope' }).then(function (result) {
-        handleRequestUpdate(result);
-        result.onchange = function () {
-            handleRequestUpdate(result);
-        }
-    }).catch(() => init(false));
-}
-
-function handleRequestUpdate(result) {
-    if (result.state == 'granted') {
-        init(true);
-    } else if (result.state == 'prompt') {
-        init(true);
-    } else if (result.state == 'denied') {
-        init(false);
-    }
-}
-
-requestGyro();
+init();
