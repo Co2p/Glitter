@@ -5,8 +5,7 @@ class Particle {
         this.height = height;
         this.resetPositionAndVelocity()
         this.size = Math.random() * 2;
-        this.velo = 0;
-        this.maxVelocity = 2;
+        this.maxVelocity = 1;
     }
 
     resetPositionAndVelocity() {
@@ -16,13 +15,13 @@ class Particle {
         this.velocityY = Math.random();
     }
 
-    update() {
+    update(preferenceX, preferenceY) {
         if(this.isOutsideCanvas(5)) {
             this.resetPositionAndVelocity();
         }
-        this.velocityX = this.gradualVelocityChange(this.velocityX)
+        this.velocityX = this.gradualVelocityChange(this.velocityX+ preferenceX);
         this.x += this.velocityX;
-        this.velocityY = this.gradualVelocityChange(this.velocityY)
+        this.velocityY = this.gradualVelocityChange(this.velocityY + preferenceY);
         this.y += this.velocityY;
     }
 
@@ -49,8 +48,6 @@ class Particle {
     draw() {
         context.beginPath();
         context.fillStyle = "gold";
-        // context.shadowColor = "gold";
-        // context.shadowBlur = 2;
         context.arc(this.x, this.y, this.size, 0, Math.PI * 2);
         context.fill();
     }
