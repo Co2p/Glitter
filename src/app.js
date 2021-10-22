@@ -31,11 +31,6 @@ function init() {
     animate();
 }
 
-
-function colorComponent(bias = 1) {
-    return Math.min(Math.floor(Math.random() * 255 * bias), 255);
-}
-
 function animate() {
     context.fillStyle = "rgb(0,0,0)";
     context.fillRect(0, 0, canvas.width, canvas.height); // clear canvas

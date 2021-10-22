@@ -35,7 +35,11 @@ class Particle {
         this.maxVelocity = velocity;
     }
     setColor(r, g, b) {
-        this.color = `rgb(${r}, ${g}, ${b})`;
+        this.color = `rgb(${this.colorRandom(r)}, ${this.colorRandom(g)}, ${this.colorRandom(b)})`;
+    }
+
+    colorRandom(bias = 1) {
+        return Math.min(Math.floor(Math.random() * 255 * bias), 255);
     }
 
     isOutsideCanvas(margin) {
